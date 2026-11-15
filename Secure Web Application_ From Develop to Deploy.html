@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Secure Web Application: From Develop to Deploy</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--g:#2ee59d;--g2:#9dffd0;--cy:#22d3ee;--am:#fbbf24;--rd:#ff5a6a;--bg:#020a06;--pn:rgba(0,255,136,.07);--ln:rgba(0,255,136,.35);--tx:#d8ffe8;--mu:#b4e6cb;--rx:0;--ry:0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{font-size:clamp(13px,1.1vw,18px);height:100%}
+body{margin:0;height:100%;background:radial-gradient(ellipse at 50% 0,#06301b,var(--bg) 70%);color:var(--tx);font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;perspective:600px;overflow:hidden;pointer-events:none}
+.fl{position:absolute;left:-50%;bottom:-5%;width:200%;height:70%;transform:rotateX(75deg);transform-origin:bottom;background:linear-gradient(var(--ln) 1px,transparent 1px) 0 0/60px 60px,linear-gradient(90deg,var(--ln) 1px,transparent 1px) 0 0/60px 60px;animation:mv 3s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 60%);mask-image:linear-gradient(transparent,#000 60%)}
+@keyframes mv{to{background-position:0 60px,60px 0}}
+.bg i{position:absolute;border:1px solid var(--ln);transform-style:preserve-3d;animation:w 18s linear infinite;box-shadow:0 0 24px rgba(0,255,136,.2),inset 0 0 24px rgba(0,255,136,.12)}.w1{width:9rem;height:9rem;left:5%;top:14%}.w2{width:6rem;height:6rem;right:7%;top:20%;border-radius:50%;animation-duration:12s!important}.w3{width:11rem;height:11rem;right:12%;bottom:26%;border-radius:50%;animation-duration:24s!important}@keyframes w{to{transform:rotateX(360deg) rotateY(360deg)}}
+#st{position:absolute;inset:0 0 64px;perspective:1400px;padding:2vh 5vw 0;overflow-y:auto;overflow-x:hidden}
+#sl{min-height:100%;transform:rotateX(calc(var(--rx)*.1deg)) rotateY(calc(var(--ry)*.1deg));transform-style:preserve-3d;display:flex;flex-direction:column;justify-content:center;gap:2.2vh}
+#sl.in{animation:in .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:rotateY(-40deg) translateZ(-350px) translateX(-8vw)}}
+.hd{display:flex;align-items:center;gap:1rem;border-bottom:1px solid var(--ln);padding-bottom:1rem}
+h2{margin:0;font:700 clamp(1.4rem,2.9vw,2.4rem) Orbitron,sans-serif;color:var(--g);text-shadow:1px 1px 0 #00a05a,2px 2px 0 #007a45,3px 3px 0 #005a32,0 0 24px rgba(0,255,136,.6);letter-spacing:.04em;transform:translateZ(40px)}
+em{font:700 .7rem Orbitron;background:var(--am);color:#2a1a00;padding:.3rem .6rem;border-radius:4px;box-shadow:0 0 14px var(--am);font-style:normal}
+.k{font:.78rem Orbitron;color:var(--mu);letter-spacing:.2em}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.1rem;transform-style:preserve-3d}
+.fw{display:flex;gap:.9rem;flex-wrap:wrap;transform-style:preserve-3d}.fw .c{flex:1 1 9rem;position:relative}
+.fw .c:not(:last-child)::after{content:"▶";position:absolute;right:-.85rem;top:50%;transform:translateY(-50%);color:var(--g);font-size:.8rem;text-shadow:0 0 8px var(--g)}
+.c{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:1rem 1.1rem;transform:translateZ(var(--z,12px)) rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));transition:transform .15s,box-shadow .3s;box-shadow:1px 1px 0 #0a5a36,2px 2px 0 #08492c,3px 3px 0 #063a23,4px 4px 0 #042b1a,0 14px 30px rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+.c{background-image:linear-gradient(135deg,rgba(255,255,255,.08),transparent 40%)}
+.in .c{animation:rise .7s cubic-bezier(.2,.8,.2,1) backwards,bob 5s ease-in-out infinite;animation-delay:calc(var(--d,0)*70ms),calc(var(--d,0)*-700ms)}@keyframes bob{50%{translate:0 -7px}}@keyframes ti{50%{filter:brightness(1.35) drop-shadow(0 0 12px #00ff88)}}@keyframes gl{50%{box-shadow:0 0 40px rgba(0,255,136,.7)}}h2,.hero h1{animation:ti 4s ease-in-out infinite}.nd{animation:gl 3s ease-in-out infinite}.cube span{animation:gl 3s ease-in-out infinite}.tm b{font-size:1.15rem;color:#fff;text-shadow:0 0 12px var(--g)}@keyframes rise{from{opacity:0;transform:translateZ(-220px) rotateX(35deg)}}
+.c:hover{--z:36px;box-shadow:1px 1px 0 #0a5a36,2px 2px 0 #08492c,3px 3px 0 #063a23,4px 4px 0 #042b1a,0 0 28px rgba(0,255,136,.45),inset 0 0 18px rgba(0,255,136,.1);border-color:var(--g)}
+.tm{text-align:center}.tm .mu{color:var(--mu);font-size:.85rem;margin-top:.4rem}.av{width:4rem;height:4rem;margin:0 auto .8rem;border-radius:50%;display:grid;place-items:center;font:700 1.1rem Orbitron;color:#001a0d;background:radial-gradient(circle at 30% 30%,#b8ffd9,var(--g));box-shadow:0 0 24px var(--g),0 6px 0 #046b3a;transform:translateZ(30px)}
+.tn{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;transform-style:preserve-3d}.tn div{background:var(--pn);border:1px solid var(--g);border-radius:10px;padding:.7rem 1.3rem;text-align:center;box-shadow:3px 3px 0 #063a23,0 0 24px rgba(0,255,136,.35);animation:bob 5s ease-in-out infinite;transform:translateZ(30px)}.tn div:nth-child(2){animation-delay:-1.7s}.tn div:nth-child(3){animation-delay:-3.4s}.tn b{display:block;font:700 clamp(1rem,1.6vw,1.4rem) Orbitron,sans-serif;color:#fff;text-shadow:0 0 12px var(--g)}.tn span{color:var(--g2);font-size:.9rem}.tn small{display:block;font:.6rem Orbitron;color:var(--mu);letter-spacing:.2em;margin-bottom:.3rem}
+.sub{font:700 clamp(.9rem,2.1vw,1.6rem) Orbitron,sans-serif;color:var(--g2);letter-spacing:.3em;text-shadow:0 0 16px var(--g)}
+.c b{display:block;color:var(--g2);font:600 .95rem Orbitron,sans-serif;margin-bottom:.4rem}
+.c p{margin:0;color:var(--tx);line-height:1.45;font-size:1.02rem}.c i{font:700 .75rem Orbitron;color:var(--g);font-style:normal}
+.g{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}.g .c{padding:.7rem .8rem}.g .c b{font-size:.78rem}.g .c p{font-size:.9rem;color:var(--mu)}
+.n{border-left:3px solid var(--g);padding:.6rem 1rem;color:var(--g2);background:rgba(0,255,136,.05);font-size:1.02rem;line-height:1.4}
+ul{margin:0;padding:0;list-style:none;display:grid;gap:.7rem}li{background:var(--pn);border:1px solid var(--ln);border-radius:8px;padding:.8rem 1rem;font-size:1.02rem}li::before{content:"◆ ";color:var(--g)}
+.hero{align-items:center;text-align:center;gap:1.4rem}
+.hero h1{margin:0;font:900 clamp(1.8rem,4.6vw,3.6rem) Orbitron,sans-serif;color:var(--g);text-shadow:1px 1px 0 #00a05a,2px 2px 0 #00a05a,3px 3px 0 #007a45,4px 4px 0 #007a45,5px 5px 0 #005a32,6px 6px 0 #005a32,0 0 34px var(--g);line-height:1.05;transform:translateZ(60px)}
+.hero p{margin:0;color:var(--g2);font-size:1.1rem}
+.cube{width:8rem;height:8rem;transform-style:preserve-3d;transform:rotateX(calc(var(--rx)*1deg - 20deg)) rotateY(calc(var(--ry)*1deg));animation:sp 14s linear infinite;margin:1.2rem 0}
+@keyframes sp{to{transform:rotateX(-20deg) rotateY(360deg)}}
+.cube span{position:absolute;inset:0;border:2px solid var(--g);background:rgba(0,255,136,.1);display:grid;place-items:center;font:700 1rem Orbitron;color:var(--g);box-shadow:0 0 20px rgba(0,255,136,.5) inset}
+.cube span:nth-child(1){transform:translateZ(4rem)}.cube span:nth-child(2){transform:rotateY(90deg) translateZ(4rem)}.cube span:nth-child(3){transform:rotateY(180deg) translateZ(4rem)}.cube span:nth-child(4){transform:rotateY(-90deg) translateZ(4rem)}.cube span:nth-child(5){transform:rotateX(90deg) translateZ(4rem)}.cube span:nth-child(6){transform:rotateX(-90deg) translateZ(4rem)}
+.tags{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}.tags span{border:1px solid var(--g);border-radius:20px;padding:.3rem .9rem;font:.7rem Orbitron;color:var(--g)}
+.ca{display:grid;gap:1.2rem;transform-style:preserve-3d;transform:rotateX(calc(10deg + var(--rx)*.3deg)) rotateY(calc(var(--ry)*.4deg))}
+.cl{display:grid;grid-template-columns:1fr minmax(8rem,.7fr) 1fr;gap:1rem;align-items:end;transform-style:preserve-3d}
+.col{display:grid;gap:2.2rem;transform-style:preserve-3d}
+.nd{background:var(--pn);border:1px solid var(--g);border-radius:10px;padding:.8rem 1rem;text-align:center;position:relative;transform:translateZ(30px);box-shadow:0 0 22px rgba(0,255,136,.3)}
+.nd b{display:block;font:700 .85rem Orbitron;color:var(--g)}.nd p{margin:.3rem 0 0;font-size:.85rem}
+.nd.r{width:min(26rem,100%);margin:0 auto;transform:translateZ(70px);background:rgba(0,255,136,.16)}.nd.s{transform:translateZ(60px)}
+.col .nd:first-child::after,.nd.r::after{content:"";position:absolute;left:50%;top:100%;height:2.2rem;width:2px;background:var(--g);box-shadow:0 0 8px var(--g)}
+.nd.r::after{height:1.2rem}
+.br{border-top:2px dashed var(--g);text-align:center;font:700 .75rem Orbitron;color:var(--g2);padding-top:.5rem;margin-bottom:2rem;text-shadow:0 0 8px var(--g)}
+#bar{position:fixed;left:0;right:0;bottom:0;height:64px;padding-bottom:env(safe-area-inset-bottom,0px);display:flex;align-items:center;gap:.7rem;padding-inline:4vw;background:rgba(2,10,6,.85);border-top:1px solid var(--ln);backdrop-filter:blur(8px);z-index:5}
+button{background:var(--pn);color:var(--g);border:1px solid var(--g);border-radius:8px;padding:.5rem .9rem;font:700 .8rem Orbitron;cursor:pointer}button:hover{background:var(--g);color:#001a0d;box-shadow:0 0 16px var(--g)}
+button.on{background:var(--g);color:#001a0d;animation:pl 1s infinite}@keyframes pl{50%{box-shadow:0 0 24px var(--g)}}
+#dots{flex:1;display:flex;gap:.35rem;justify-content:center;flex-wrap:wrap}#dots u{width:.6rem;height:.6rem;border-radius:50%;background:var(--ln);cursor:pointer}#dots u.a{background:var(--g);box-shadow:0 0 10px var(--g)}
+#ct{font:.8rem Orbitron;color:var(--mu);min-width:4.5rem;text-align:right}
+#ty{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:rgba(0,40,20,.95);border:1px solid var(--g);border-radius:8px;padding:.5rem 1rem;font-size:.9rem;opacity:0;transition:opacity .3s;z-index:6;max-width:90vw;text-align:center}#ty.s{opacity:1}
+#mn{position:fixed;inset:0;background:rgba(2,10,6,.94);z-index:7;display:none;padding:6vh 6vw 90px;overflow:auto}#mn.s{display:block}
+#mn div{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.8rem;margin-top:1rem}#mn .c{cursor:pointer}
+.cl .nd{border-color:var(--cy);box-shadow:0 0 22px rgba(34,211,238,.3);animation-name:gc}.cl .nd b{color:var(--cy)}@keyframes gc{50%{box-shadow:0 0 40px rgba(34,211,238,.7)}}.col .nd:first-child::after{background:var(--cy);box-shadow:0 0 8px var(--cy)}.br{border-top-color:var(--am);color:var(--am);text-shadow:0 0 8px var(--am)}.rj{color:var(--rd);text-shadow:0 0 8px var(--rd);display:inline-block;margin-top:.4rem}
+@media(max-width:800px){.g{grid-template-columns:repeat(2,1fr)}.cl{grid-template-columns:1fr}.br{margin:0}.col{gap:1.6rem}.hint{display:none}}
+
+</style></head><body>
+<div class="bg"><div class="fl"></div><i class=w1></i><i class=w2></i><i class=w3></i></div>
+<div id="st"><div id="sl"></div></div>
+<div id="ty"></div>
+<div id="mn"><h2>Slide menu</h2><div id="mi"></div></div>
+<div id="bar"><button id="pv" aria-label="Previous">◀</button><button id="nx" aria-label="Next">▶</button><button id="mc">🎙 VOICE</button><button id="mu">MENU</button><button id="fs" aria-label="Full screen">⛶ FULL</button><div id="dots"></div><span id="ct"></span></div>
+<script>
+const P=["MSC CYBER SECURITY / DEVSECOPS PROJECT"];
+const S=[
+{t:"Secure Web Application: From Develop to Deploy",y:"hero",kw:"home title intro cover"},
+{t:"Project team and supervision",y:"t",kw:"team supervisor members",a:[["MHK","Dr. Mosaddek Hossain Kamal","Supervisor · Professor","Dept. of Computer Science and Engineering, Faculty of Engineering and Technology, University of Dhaka"],["KK","Kaisar Ahmed Khan","DevOps Specialist","Professional Master’s in Information and Cyber Security"],["AM","Abdullah Al Mamun","Senior Software Developer","Professional Master’s in Information and Cyber Security"]],n:"Project: secure development and deployment of a trade document management system, mainly Letter of Credit (LC)."},
+{t:"The problem we are solving",y:"c",kw:"problem risk",a:[["01 Application risks","Trade and LC systems hold sensitive business documents and approvals. Small mistakes cause serious financial exposure."],["02 Pipeline risks","Dependencies, images, CI secrets and infrastructure configuration widen the attack surface."],["03 Deployment risks","Default Kubernetes settings may allow excess privilege, open traffic and untrusted workloads."]],n:"Research question: can automated, layered controls measurably reduce risk across build, release and runtime?"},
+{t:"Project aim and objectives",y:"l",kw:"aim objective goal",a:["Implement a secure trade document and LC management app: login, document upload, maker-checker approval, role-based access","Map and verify controls against all 10 OWASP Top 10:2025 categories","Automate unit tests, SAST, dependency, image and IaC scans, and DAST","Secure software design and a certificate-based trust boundary between app and database","Publish only approved images, deploy to Kubernetes, compare baseline vs hardened"],n:"Aim: a reproducible, security-gated DevSecOps workflow for a small registration application."},
+{t:"Scope: trade document and LC management",y:"c",kw:"scope module",a:[["LC application","Importer submits LC request; validation"],["Document vault","Invoice, bill of lading, packing list; checked uploads"],["Approval workflow","Maker-checker; amendment tracking"],["Role dashboards","Importer, exporter, bank officer, admin"],["Audit + health","Tamper-evident audit trail; probes"]],n:"Out of scope: SWIFT integration, real payments, microservices, public production launch."},
+{t:"Technology decision",y:"c",kw:"technology decision dotnet",a:[["Recommended: .NET 8+ / ASP.NET Core","Linux containers; Identity, EF Core, modern middleware, Kubernetes-friendly. Choose a supported LTS release."],["Alternative: .NET Framework 4.8.x","Needs Windows containers and Windows worker nodes. More complexity; not recommended for this lab."]],n:"Decision: modern ASP.NET Core. “.NET Framework” is a different, Windows-bound product."},
+{t:"End-to-end reference architecture",y:"f",kw:"architecture reference",a:[["Git repo","C# / tests / IaC"],["CI workflow","Build + test + gate"],["Security tools","Sonar / Trivy / ZAP"],["Docker Hub","Immutable digest"],["Kubernetes","Hardened workload"]],n:"Feedback loop: findings → remediation → re-scan → approved release."},
+{t:"OWASP Top 10:2025 — application controls",y:"g",kw:"owasp top ten",a:[["A01","Broken access control","Ownership checks; deny by default"],["A02","Security misconfiguration","Safe headers; HTTPS"],["A03","Supply chain failures","Pinned deps; SBOM; provenance"],["A04","Cryptographic failures","TLS; Identity hashing; secret store"],["A05","Injection","EF Core parameters; output encoding"],["A06","Insecure design","Threat model; rate limits"],["A07","Authentication failures","Lockout; secure cookies"],["A08","Integrity failures","Verified artifacts; approvals"],["A09","Logging &amp; alerting","Audit events; redact secrets"],["A10","Exceptional conditions","Fail closed; safe errors"]]},
+{t:"Secure LC and document handling by design",y:"c",kw:"design document handling",a:[["Identity + access","Framework password hashes; lockout; MFA-ready; per-LC ownership and role checks on every request."],["Document integrity","Type and size validation; malware scan; SHA-256 hash; storage outside web root; encryption at rest."],["Workflow + audit","Maker-checker approval; immutable status history; least-privilege DB account; no secrets in logs."]],n:"Negative tests: IDOR on LC files, malicious upload, SQL injection, CSRF, XSS, brute force, privilege escalation, approval bypass."},
+{t:"Software security: six pillars",nw:1,y:"c",kw:"software security pillars",a:[["Secure design","Threat modeling (STRIDE), abuse cases, security requirements before code."],["Secure coding","Validation, encoding, safe APIs, .NET analyzers, peer review checklists."],["Secrets management","No secrets in code; vault or Kubernetes secrets; automated secret scanning."],["Dependency hygiene","Pinned packages, SBOM, SCA scans, scheduled updates."],["Build integrity","Protected branches, signed commits and images, provenance."],["Verification","Unit, SAST, DAST and negative tests as merge gates."]]},
+{t:"Software security across the lifecycle",nw:1,y:"f",kw:"lifecycle sdlc",a:[["Design","STRIDE model; security requirements"],["Code","Analyzers; pre-commit secret scan"],["Build","SAST; SCA; SBOM"],["Release","Sign image; verify provenance"],["Run","Logging; alerts; patching"]],n:"Each stage has an owner, a tool and a pass or fail gate. Findings flow back to Design."},
+{t:"Trust architecture: Root CA and secondary CAs",nw:1,y:"ca",kw:"certificate authority root ca secondary trust architecture"},
+{t:"Mutual TLS between app and database",nw:1,y:"f",kw:"mtls handshake mutual tls",a:[["1 Connect","App opens TLS to the DB"],["2 DB proves","Cert issued by CA-DB"],["3 App verifies","Trusts CA-DB chain only"],["4 App proves","Client cert from CA-App"],["5 DB verifies","Trusts CA-App only; maps identity"]],b:[["Short-lived certs","30–90 days; automatic rotation"],["Revocation","CRL or OCSP per secondary CA"],["Key custody","Root offline; issuing keys in vault or HSM"],["Negative tests","Wrong CA, expired, revoked: rejected"]]},
+{t:"Security testing: complementary layers",y:"c",kw:"testing sast dast sonar trivy",a:[["SAST · SonarQube Cloud","Source patterns and hotspots. PR + main."],["SCA / image / IaC · Trivy","Vulnerable packages, secrets, config. Commit + image build."],["DAST · OWASP ZAP","Probes running app. Staging."],["Tests / policy · xUnit + admission","Authorization, abuse cases, deployment controls. Every merge."]],n:"SAST ≠ DAST. No single scanner proves OWASP coverage."},
+{t:"CI/CD: security gates before release",y:"f",kw:"cicd pipeline gates",a:[["01 Commit + PR","Review; branch rules"],["02 Build + test","dotnet test; coverage"],["03 Source scan","Sonar quality gate"],["04 Build image","Multistage Dockerfile"],["05 Scan artifact","Trivy severity policy"],["06 Push + deploy","Digest; approved staging"]],n:"Post-deploy: ZAP in isolated staging → report → approve promotion or roll back."},
+{t:"Docker: reduced attack surface",y:"f",kw:"docker container image",a:[["Build",""],["Trivy",""],["Docker Hub",""],["Digest deploy",""]],b:[["Build approach","Multi-stage SDK → runtime; pinned runtime image; non-root user; explicit port + health probe; no credentials in layers."],["Publication controls","Tag with commit SHA; generate SBOM; block critical findings; push from CI; deploy by immutable digest."]]},
+{t:"Kubernetes: secure topology and hardening",y:"f",kw:"kubernetes cluster hardening",a:[["Ingress + TLS",""],["ClusterIP Service",""],["ASP.NET pods ×2","Non-root; read-only FS"],["Database","mTLS from CA-DB"]],b:[["Pod admission","Restricted PSA; runAsNonRoot; drop capabilities; seccomp"],["Network","Default-deny NetworkPolicy + allowlists"],["Access + secrets","Least-privilege RBAC; encrypted secrets"],["Ops","Verified images; probes, limits, audit logs, backups"]]},
+{t:"Dynamic testing: OWASP ZAP",y:"f",kw:"zap dynamic",a:[["01 Deploy","Isolated staging; seeded accounts"],["02 Baseline","Headers; cookie flags"],["03 Active tests","Scoped attacks; test only"],["04 Triage","Fix, rerun, save evidence"]],n:"Controls: approved target, authenticated context, limited scan rate. Never scan real users or unauthorized systems."},
+{t:"How success will be measured",y:"c",kw:"success measure metrics",a:[["Coverage · 10/10","OWASP categories mapped to tests"],["Pipeline · 100%","Required checks enforced on protected branches"],["Release · 0","Critical findings without documented exception"],["Runtime · Pass","Pod policy, RBAC, network and mTLS rejection tests"],["DAST · Trend","Findings fixed and re-tested"],["Time · Measure","Build, scan and deploy duration"]],n:"Evaluation: documented baseline vs hardened build; record limitations and false positives."},
+{t:"Six-month implementation plan",y:"f",kw:"plan timeline months",a:[["M1","Requirements + threat model"],["M2","Secure app + software security"],["M3","CI + Sonar + Trivy"],["M4","Docker + Kubernetes + CA / mTLS"],["M5","ZAP + hardening"],["M6","Evaluation + thesis"]],n:"Each phase delivers artifacts: source, tests, reports, manifests, certificates and a documented security decision."},
+{t:"Demonstration and deliverables",y:"c",kw:"demo deliverables",a:[["Live demonstration","Login → create LC → upload documents → approval flow → access test → code and image scan → digest → rollout → mTLS rejection → ZAP report."],["Submission package","Source, Dockerfile, CI YAML, manifests, CA design, threat model, OWASP matrix, reports, thesis."]],n:"Defensible claim: reduced demonstrated risk, not a guarantee of a vulnerability-free application."},
+{t:"References",y:"c",kw:"references",a:[["OWASP Top 10:2025","top10.owasp.org/2025"],["OWASP ZAP","zaproxy.org/docs/docker"],["Trivy","trivy.dev/latest/docs"],["SonarQube Cloud","docs.sonarsource.com/sonarqube-cloud"],["Kubernetes security","kubernetes.io/docs/concepts/security"],["ASP.NET Core security","learn.microsoft.com/aspnet/core/security"]]}
+];
+const $=q=>document.querySelector(q),cd=([h,p])=>`<div class=c><b>${h}</b>${p?`<p>${p}</p>`:""}</div>`;
+let i=0;
+function body(s){
+ if(s.y=="hero")return `<div class="hero" style="display:flex;flex-direction:column;align-items:center;gap:1.2rem"><div class=k>MSc CYBER SECURITY / PROJECT PROPOSAL</div><h1>SECURE WEB<br>APPLICATION</h1><div class=sub>FROM DEVELOP TO DEPLOY</div><div class=cube>${["CODE","TEST","BUILD","SCAN","PUSH","DEPLOY"].map(x=>`<span>${x}</span>`).join("")}</div><p>A DevSecOps pipeline for a secure trade document and Letter of Credit (LC) management system</p><div class=tags><span>LC · TRADE DOCS</span><span>ASP.NET CORE</span><span>OWASP TOP 10:2025</span><span>KUBERNETES</span><span>SOFTWARE SECURITY</span><span>ROOT CA + mTLS</span></div><div class=tn><div><small>SUPERVISOR</small><b>Dr. Mosaddek Hossain Kamal</b><span>Professor, CSE · University of Dhaka</span></div><div><small>TEAM MEMBER</small><b>Kaisar Ahmed Khan</b><span>DevOps Specialist</span></div><div><small>TEAM MEMBER</small><b>Abdullah Al Mamun</b><span>Senior Software Developer</span></div></div></div>`;
+ if(s.y=="ca")return `<div class=ca><div class="nd r"><b>ROOT CA</b><p>Offline, air-gapped. Signs only the secondary CAs.</p></div><div class=cl><div class=col><div class=nd><b>SECONDARY CA · APP</b><p>Issues application identities</p></div><div class="nd s"><b>APPLICATION SERVER</b><p>ASP.NET Core pods</p></div></div><div class=br>mTLS<br>each side trusts only the other tier’s CA<br><span class=rj>✕ rogue host: rejected</span></div><div class=col><div class=nd><b>SECONDARY CA · DB</b><p>Issues database identities</p></div><div class="nd s"><b>DATABASE SERVER</b><p>Accepts only CA-App client certs</p></div></div></div></div><div class=n>Idea: separate the app and database trust domains. A stolen app certificate cannot impersonate a database, a rogue host cannot join either tier, and one secondary CA can be revoked without touching the other.</div>`;
+ let o="";
+ if(s.y=="c")o=`<div class=row>${s.a.map(cd).join("")}</div>`;
+ if(s.y=="t")o=`<div class=row>${s.a.map(([a,b,c,d])=>`<div class="c tm"><div class=av>${a}</div><b>${b}</b><p>${c}</p><p class=mu>${d}</p></div>`).join("")}</div>`;
+ if(s.y=="l")o=`<ul>${s.a.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+ if(s.y=="f")o=`<div class=fw>${s.a.map(cd).join("")}</div>`+(s.b?`<div class=row>${s.b.map(cd).join("")}</div>`:"");
+ if(s.y=="g")o=`<div class=g>${s.a.map(([a,b,c])=>`<div class=c><i>${a}</i><b>${b}</b><p>${c}</p></div>`).join("")}</div>`;
+ return o;
+}
+function show(n){
+ i=Math.max(0,Math.min(S.length-1,n));const s=S[i],el=$("#sl");
+ el.className="";void el.offsetWidth;el.className="in";
+ el.innerHTML=(s.y=="hero"?"":`<div class=hd>${s.nw?"<em>NEW</em>":""}<h2>${s.t}</h2></div>`)+body(s)+(s.n?`<div class=n>${s.n}</div>`:"");
+ el.querySelectorAll(".c").forEach((c,k)=>c.style.setProperty("--d",k));
+ $("#ct").textContent=`${String(i+1).padStart(2,"0")} / ${S.length}`;
+ document.querySelectorAll("#dots u").forEach((d,k)=>d.className=k==i?"a":"");
+}
+$("#dots").innerHTML=S.map((s,k)=>`<u title="${s.t}" data-k="${k}"></u>`).join("");
+$("#dots").onclick=e=>e.target.dataset.k&&show(+e.target.dataset.k);
+$("#mi").innerHTML=S.map((s,k)=>`<div class=c data-k="${k}"><b>${String(k+1).padStart(2,"0")}${s.nw?" · NEW":""}</b><p>${s.t}</p></div>`).join("").replace(/^/,"");
+$("#mi").onclick=e=>{const c=e.target.closest(".c");if(c){$("#mn").classList.remove("s");show(+c.dataset.k)}};
+function fs(){const d=document,e=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement)(d.exitFullscreen||d.webkitExitFullscreen).call(d);else{const r=e.requestFullscreen||e.webkitRequestFullscreen;r?Promise.resolve(r.call(e)).catch(()=>toast("Full screen is blocked here. Open the page in its own tab.")):toast("Full screen is not supported by this browser")}}
+$("#fs").onclick=fs;
+$("#pv").onclick=()=>show(i-1);$("#nx").onclick=()=>show(i+1);
+$("#mu").onclick=()=>$("#mn").classList.toggle("s");
+document.onkeydown=e=>{if(e.key=="ArrowRight"||e.key==" ")show(i+1);if(e.key=="ArrowLeft")show(i-1);if(e.key=="Escape")$("#mn").classList.remove("s");if(e.key=="f"||e.key=="F")fs()};
+document.onmousemove=e=>{const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5,r=document.documentElement.style;r.setProperty("--rx",(-y*30).toFixed(1));r.setProperty("--ry",(x*40).toFixed(1));
+ const c=e.target.closest&&e.target.closest(".c");if(c&&!c.closest("#mn")){const b=c.getBoundingClientRect();c.style.setProperty("--tx",(-((e.clientY-b.top)/b.height-.5)*14).toFixed(1)+"deg");c.style.setProperty("--ty",(((e.clientX-b.left)/b.width-.5)*14).toFixed(1)+"deg")}};
+document.onmouseout=e=>{const c=e.target.closest&&e.target.closest(".c");if(c){c.style.removeProperty("--tx");c.style.removeProperty("--ty")}};
+let tt;function toast(m){const t=$("#ty");t.textContent=m;t.classList.add("s");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("s"),2600)}
+const W={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20,"twenty one":21};
+function cmd(x){x=x.toLowerCase().trim();toast("🎙 “"+x+"”");
+ if(/\b(full ?screen|exit full)/.test(x))return fs();
+ if(/\b(close|hide)\b/.test(x))return $("#mn").classList.remove("s");
+ if(/\b(menu|overview|index|list)\b/.test(x))return $("#mn").classList.add("s");
+ if(/\b(help|commands)\b/.test(x))return toast("Say: next, back, first, last, full screen, slide 12, or a topic like “software security”, “root CA”, “docker”, “menu”");
+ let m=x.match(/(?:slide|go to|number|page)\s*(\d+|[a-z ]+)/);
+ if(m){const v=+m[1]||W[m[1].trim()];if(v)return show(v-1)}
+ for(const k in W)if(new RegExp("^(go to |slide )?"+k+"$").test(x))return show(W[k]-1);
+ if(/\b(next|forward|continue)\b/.test(x))return show(i+1);
+ if(/\b(back|previous|before)\b/.test(x))return show(i-1);
+ if(/\b(first|beginning|start|home)\b/.test(x))return show(0);
+ if(/\b(last|end|finish)\b/.test(x))return show(S.length-1);
+ const hit=S.findIndex(s=>s.kw&&s.kw.split(" ").some(w=>w.length>3&&x.includes(w)));
+ if(hit>=0)return show(hit);
+ toast("Not understood: say “help” for commands");
+}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec,on=false;
+$("#mc").onclick=()=>{
+ if(!SR)return toast("Voice needs Chrome, Edge or Safari. Mouse and arrow keys still work.");
+ if(on){on=false;rec&&rec.stop();window.ms&&window.ms.getTracks().forEach(t=>t.stop());window.ms=null;$("#mc").classList.remove("on");return toast("Voice off")}
+ rec=new SR();rec.lang="en-US";rec.continuous=true;rec.interimResults=false;
+ rec.onresult=e=>cmd(e.results[e.results.length-1][0].transcript);
+ rec.onerror=e=>{if(e.error=="not-allowed"||e.error=="service-not-allowed"){on=false;$("#mc").classList.remove("on");toast("Microphone blocked. Allow it, or open this page in its own tab.")}};
+ rec.onend=()=>{if(on)setTimeout(()=>{try{rec.start()}catch(_){}},350)};
+ const go=()=>{try{rec.start();on=true;$("#mc").classList.add("on");toast("Listening… say “next”, “slide 12” or “help”")}catch(_){toast("Could not start the microphone")}};(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&!window.ms?navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{window.ms=s;go()}).catch(()=>toast("Microphone blocked. Allow it, or open this page in its own tab.")):go());
+};
+show(0);
+</script></body></html>
